@@ -23,22 +23,22 @@ read -p 'Enter target world destination or d for default: ' input_choice
 
 if [ “$input_choice” = “d” ]
 then
- x-terminal-emulator -x roslaunch slam_project world.launch world_file:=$HOME/catkin_ws/src/slam_project/worlds/kitchen_dining.world 2>/dev/null &
+ x-terminal-emulator -e roslaunch slam_project world.launch world_file:=/home/jeremy/catkin_ws/src/slam_project/worlds/kitchen_dining.world 2>/dev/null &
 
 else
- x-terminal-emulator -x roslaunch slam_project world.launch world_file:=$input_choice 2>/dev/null &
+ x-terminal-emulator -e roslaunch slam_project world.launch world_file:=$input_choice 2>/dev/null &
 fi
 
 sleep 3 &&
 
-x-terminal-emulator -x roslaunch slam_project teleop.launch 2>/dev/null &
+x-terminal-emulator -e roslaunch slam_project teleop.launch 2>/dev/null &
 
 sleep 3 &&
 
 echo ' '
 read -p 'Press any key to continue to mapping... ' -n1 -s
 
-x-terminal-emulator -x roslaunch slam_project mapping.launch simulation:=true 2>/dev/null &
+x-terminal-emulator -e roslaunch slam_project mapping.launch simulation:=true 2>/dev/null &
 sleep 3 &&
 x-terminal-emulator -e roslaunch slam_project rviz.launch 2>/dev/null
 
