@@ -13,16 +13,16 @@
 
 \begin{document}
 
-\title{Slam Project}
+\title{Map My World}
 
 \author{Jeremy Hale}
 
-\markboth{SLAM project, Robotics Nanodegree Program, Udacity}%
+\markboth{SLAM, Robotics Nanodegree Program, Udacity}%
 {}
 \IEEEtitleabstractindextext{%
 
 \begin{abstract}
-Student gives a high-level overview of what is being attempted in the report. Abstracts are typically 5-10 sentences that provide just enough context to understand the gist of the report.
+The Udacity Robotics Nanodegree project Map My World is a simluation of a small robot mapping two different environments. The robot uses a RGBD camera and a laser scanner with the RTAB-Map method of SLAM (simultaenous localization and mapping) to create a map of the environments. ROS and Gazebo/RViz are the main tools employed.
 \end{abstract}
 
 % Note that keywords are not normally used for peerreview papers.
@@ -37,28 +37,24 @@ Robot, IEEEtran, Udacity, \LaTeX, Localization.
 \section{Introduction}
 \label{sec:introduction}
 
-\IEEEPARstart{T}{he} introduction should provide some material regarding the history of the problem, why it is important and what is intended to be achieved. If there exists any previous attempts to solve this problem, this is a great place to note these while conveying the differences in your approach (if any). The intent is to provide enough information for the reader to understand why this problem is interesting and setting up the conversation for the solution you have provided
-Student can clearly and accurately explain the problem domain.
+\IEEEPARstart{T}{his} project demonstrates the use of SLAM in simulation using ROS and specifically the RTAB-Map implementation of SLAM. SLAM is a technique to solve the problem of localization while building a map from sensor inputs. In this simulation, a small two-wheel robot with RBGD camera and laser scanner is manually navigated around an environment. During navigation, the robot uses its sensor inputs to build a map of the environment.
+
+The problem of mapping applies to many different situations as a robot may commonly find itself in an environment for which it does not have a map a priori. Even if a map were to exist, most environments in the world are not static. In homes and offices, for example, furniture or other significant objects or obstructions may be moved and would differ from prior maps.
 
 \section{Background}
 Explain the importance of both mapping two and three dimensional space.
 
 Background - The student provides a sufficient background into the scope of the problem / technologically while also identifying some of the current challenges in robot mapping and why the problem domain is an important piece of robotics. They further discuss and compare mapping algorithms
 
-\subsection{Model Configuration}
-Scene and robot configuration - Explain how your personal Gazebo world was created and what is the layout of it. Justify your choice of robot parameters, sensor location, and how you decided to configure your package structure.
+\section{Model Configuration}
+The robot was based on the Udacity robot from the "Where am I?" project. It was a small box-shaped chassis with 2 driven-wheels on the sides and 2 stabilizing wheels fore and aft. The robot has a Hokuyo laser scanner and a camera attached on the front. In the previous project, the camera was a simple RGB camera. This was changed to an RGBD camera to satisfy the project requirements.
 
-Scene and robot configuration - Student explains how the gazebo world was created by providing an overview of the layout of items in his/her customized Gazebo world. Student also describes the robot's parameters, sensor features, and reasoning on the package structure.
-
-\subsection{World Creation}
-Scene and robot configuration - Explain how your personal Gazebo world was created and what is the layout of it. Justify your choice of robot parameters, sensor location, and how you decided to configure your package structure.
-
-Scene and robot configuration - Student explains how the gazebo world was created by providing an overview of the layout of items in his/her customized Gazebo world. Student also describes the robot's parameters, sensor features, and reasoning on the package structure.
-
-\section{Results}
-Show the results of both occupancy grid and 3D map.
-
-Results - The student should include the images for mapping process, final map (2D/3D) for both Gazebo worlds.
+\begin{figure}[thpb]
+    \centering
+    \includegraphics[width=\linewidth]{robot}
+    \caption{Robot}
+    \label{fig:robot}
+\end{figure}
 
 \begin{figure}[thpb]
     \centering
@@ -67,30 +63,105 @@ Results - The student should include the images for mapping process, final map (
     \label{fig:frames}
 \end{figure}
 
+
+Scene and robot configuration - Student explains how the gazebo world was created by providing an overview of the layout of items in his/her customized Gazebo world. Student also describes the robot's parameters, sensor features, and reasoning on the package structure.
+
+\section{World Creation}
+The personal "world" is supposed to be a back alley. There is a large brick wall, a pickup truck, a dumpster and a fire hydrant.
+
 \begin{figure}[thpb]
+    \centering
+    \includegraphics[width=\linewidth]{alley_gazebo}
+    \caption{Alley}
+    \label{fig:alley}
+\end{figure}
+
+\section{Results}
+
+\subsection{Kitchen \& Dining}
+
+The occupancy and 3D maps for the "Kitchen and Dining" world are shown below. There are also images showing the 3 closures.
+
+\begin{figure}[thpb]
+    \centering
+    \includegraphics[width=\linewidth]{dining_map}
+    \caption{Kitchen \& Dining Occupancy Map}
+    \label{fig:dining_2d}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{workspace_benchmark_crop}
+    \caption{Kitchen \& Dining 3D Map}
+    \label{fig:dining_3d}
+\end{figure}
+
+\begin{figure}
     \centering
     \includegraphics[width=\linewidth]{closure_1}
     \caption{Udacity World Closure}
     \label{fig:closure 1}
 \end{figure}
 
-\begin{figure}[thpb]
+\begin{figure}
     \centering
     \includegraphics[width=\linewidth]{closure_2}
     \caption{Udacity World Closure}
     \label{fig:closure 2}
 \end{figure}
 
-\begin{figure}[thpb]
+\begin{figure}
     \centering
     \includegraphics[width=\linewidth]{closure_3}
     \caption{Udacity World Closure}
     \label{fig:closure 3}
 \end{figure}
 
-\subsection{Localization Results}
-\subsubsection{Benchmark}
-\subsubsection{Student}
+\subsection{Back Alley}
+
+The occupancy and 3D maps for the "Back Alley" world are shown below. There are also images showing the 3 closures.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{alley}
+    \caption{Back Alley Process}
+    \label{fig:alley_process}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{alley_occupancy}
+    \caption{Back Alley Occupancy}
+    \label{fig:alley_2d}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{alley_confused}
+    \caption{Back Alley Map}
+    \label{fig:alley_3d}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{alley_closure_1}
+    \caption{Alley Closure 1}
+    \label{fig:alley_closure_1}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{alley_closure_2}
+    \caption{Alley Closure 2}
+    \label{fig:alley_closure_2}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{alley_closure_3}
+    \caption{Alley Closure 3}
+    \label{fig:alley_closure_3}
+\end{figure}
 
 \section{Discussion}
 What went well, what went wrong. Reflect upon the results of your robot's performance, and the performance of mapping in both worlds. Justify your answers with facts.
