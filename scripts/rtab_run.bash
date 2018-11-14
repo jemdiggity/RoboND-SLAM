@@ -24,11 +24,11 @@ read -p 'Enter target world destination or enter for default: ' input_choice
 if [ “$input_choice” = “” ]
 then
  echo "Using default world"
- x-terminal-emulator -e roslaunch slam_project world.launch world_file:=/home/jeremy/catkin_ws/src/slam_project/worlds/kitchen_dining.world 2>/dev/null
+ x-terminal-emulator -e roslaunch slam_project world.launch world_file:=kitchen_dining 2>/dev/null
 
 else
- echo "Using $input_choice world"
- x-terminal-emulator -e roslaunch slam_project world.launch world_file:=$input_choice 2>/dev/null
+ echo "Using ${input_choice}.world"
+ x-terminal-emulator -e roslaunch slam_project world.launch world_file:=${input_choice} 2>/dev/null
 fi
 
 sleep 3 &&
