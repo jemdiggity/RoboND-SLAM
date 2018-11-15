@@ -42,9 +42,11 @@ Robot, IEEEtran, Udacity, \LaTeX, Localization.
 The problem of mapping applies to many different situations as a robot may commonly find itself in an environment for which it does not have a map a priori. Even if a map were to exist, most environments in the world are not static. In homes and offices, for example, furniture or other significant objects or obstructions may be moved and would differ from prior maps.
 
 \section{Background}
-Explain the importance of both mapping two and three dimensional space.
+Any robot that needs to navigate autonomously needs a map in order to plan a route from the origin to the destination. This map could be a "world" map and the robot could use GPS to navigate, but for any indoor application or an outdoor application where obstructions are likely to move, a map will either not exist or not be sufficiently helpful for navigation. Therefore, the robot must determine the map itself and also determine its location relative to this map.
 
-Background - The student provides a sufficient background into the scope of the problem / technologically while also identifying some of the current challenges in robot mapping and why the problem domain is an important piece of robotics. They further discuss and compare mapping algorithms
+For the robot in discussion here, a 2D map is sufficient, because our robot moves only in 2D space. However, for airborne robots like drones a 3D map is necessary because they move in three dimensions.
+
+During the classroom work for this project, several varieties of SLAM were discussed such as FastSLAM and GraphSLAM. The algorithm used in this project is RTAB-Map (real-time appearance-based) which is based on GraphSLAM.
 
 \section{Model Configuration}
 The robot was based on the Udacity robot from the "Where am I?" project. It was a small box-shaped chassis with 2 driven-wheels on the sides and 2 stabilizing wheels fore and aft. The robot has a Hokuyo laser scanner and a camera attached on the front. In the previous project, the camera was a simple RGB camera. This was changed to an RGBD camera to satisfy the project requirements.
@@ -63,15 +65,12 @@ The robot was based on the Udacity robot from the "Where am I?" project. It was 
     \label{fig:frames}
 \end{figure}
 
-
-Scene and robot configuration - Student explains how the gazebo world was created by providing an overview of the layout of items in his/her customized Gazebo world. Student also describes the robot's parameters, sensor features, and reasoning on the package structure.
-
 \section{World Creation}
 The personal "world" is supposed to be a back alley. There is a large brick wall, a pickup truck, a dumpster and a fire hydrant.
 
 \begin{figure}[thpb]
     \centering
-    \includegraphics[width=\linewidth]{alley_gazebo}
+    \includegraphics[width=\linewidth]{alley_no_cone}
     \caption{Alley}
     \label{fig:alley}
 \end{figure}
@@ -164,16 +163,32 @@ The occupancy and 3D maps for the "Back Alley" world are shown below. There are 
 \end{figure}
 
 \section{Discussion}
-What went well, what went wrong. Reflect upon the results of your robot's performance, and the performance of mapping in both worlds. Justify your answers with facts.
+The mapping performance for the robot in the "Dining and Kitchen" world was satisfactory. Once the robot had re-traced its path, the RTAB-Map algorithm detected closures easily with subjectively little distortion.
 
-Discussion - The student explains how the procedure went and methodologies to improve it. The student should compare and contrast the performance of RTAB Mapping in different worlds.
+Mapping the "Back Alley" world proved to be much more difficult. The mapping algorithm easily mixed up the rear and front wheel of the pickup truck causing mapping errors. A image from "rtabmap-databaseViewer" shows a closure between different truck wheels. Even with a bright orange traffic cone placed beside the wheel, the algorithm still had issues discerning the back and front wheels.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{confused_cone_viewer}
+    \caption{RTAB-Map Confused}
+    \label{fig:confused}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{confused_cone}
+    \caption{RTAB-Map Confused with Cone}
+    \label{fig:confused_cone}
+\end{figure}
+
+Perhaps RTAB-Map can be tuned to have better performance. Adjusting the parameters for RTAB-Map was attempted as per the ROS RTAB-Map tutorial, but met limited success. There was also some confusion about setting up the ROS envinronment on a local machine and whether RTAB-Map 1.8 or 1.9 would work.
+
+Navigating the small robot around was painfully slow. It took around 10 minutes to complete 3 circles of the environments.
 
 \section{Conclusion / Future work}
-Student discusses future desires with RTAB-Map. Talk about any robots and environment they applied this too.
+Considering that the project on SLAM was only a simulation, it seems that it would be challenging to optimize and get satisfactory results in the real world.
 
-"Future Work - The student can discuss how they would like to leverage this tool in robotics. The student identifies other areas where mapping could be done and for what reason. Such as simulated room or physical place.
+In future, more automation would be helpful. Manually navigating the robot around the environment was extremely time consuming. It would be much more efficient to define a path for the robot to follow.
 
-\bibliography{bib}
-\bibliographystyle{ieeetr}
-
+Another issue is a lack of useful documentation on elements of ROS and RTAB-Map.
 \end{document}
