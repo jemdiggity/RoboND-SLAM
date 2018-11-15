@@ -6,7 +6,7 @@
 
 \documentclass[10pt,journal,compsoc]{IEEEtran}
 
-\usepackage[pdftex]{graphicx}    
+\usepackage[pdftex]{graphicx}
 \usepackage{cite}
 \hyphenation{op-tical net-works semi-conduc-tor}
 \usepackage{hyperref}
@@ -22,7 +22,7 @@
 \IEEEtitleabstractindextext{%
 
 \begin{abstract}
-The Udacity Robotics Nanodegree project Map My World is a simluation of a small robot mapping two different environments. The robot uses a RGBD camera and a laser scanner with the RTAB-Map method of SLAM (simultaenous localization and mapping) to create a map of the environments. ROS and Gazebo/RViz are the main tools employed.
+The Udacity Robotics Nanodegree project Map My World is a simluation of a small robot mapping two different environments. The robot uses a RGBD camera and a laser scanner with the RTAB-Map method of SLAM (simultaenous localization and mapping) to create a map of the environments. ROS and Gazebo/RViz are the main tools employed. The robot successfully maps the provided "Kitchen \& Dining" world, but difficulty in finding loop closures was found with the student "Back Alley" world.
 \end{abstract}
 
 % Note that keywords are not normally used for peerreview papers.
@@ -42,11 +42,15 @@ Robot, IEEEtran, Udacity, \LaTeX, Localization.
 The problem of mapping applies to many different situations as a robot may commonly find itself in an environment for which it does not have a map a priori. Even if a map were to exist, most environments in the world are not static. In homes and offices, for example, furniture or other significant objects or obstructions may be moved and would differ from prior maps.
 
 \section{Background}
-Any robot that needs to navigate autonomously needs a map in order to plan a route from the origin to the destination. This map could be a "world" map and the robot could use GPS to navigate, but for any indoor application or an outdoor application where obstructions are likely to move, a map will either not exist or not be sufficiently helpful for navigation. Therefore, the robot must determine the map itself and also determine its location relative to this map.
+Any robot that needs to navigate autonomously needs a map in order to plan a route from the origin to the destination. This map could be a "world" map and the robot could use GPS to navigate, but for any indoor application or an outdoor application where obstructions are likely to move, a map will either not exist or not be sufficiently helpful for navigation. Therefore, the robot must determine the map itself and also determine its location relative to this map. This technique of determining the map and the robot pose is referred to as SLAM, or Simultaneous Localization and Mapping.
+
+
+During the classroom work for this project, several varieties of SLAM were discussed such as FastSLAM and GraphSLAM. FastSLAM uses a particle filter to estimate the posterior probability of the trajectory and a low-dimensional extended Kalman filter to estimate the map. FastSLAM requires known landmark positions. Grid-based FastSLAM obviates the need for known landmarks by using Occupancy Grid Mapping for solving the mapping problem.
+
+The algorithm used in this project is RTAB-Map (real-time appearance-based) which is based on GraphSLAM. GraphSLAM is regarded as more accurate than the particle-based approach of FastSLAM because it solves the Full SLAM problem of solving the full trajectory and not just the current pose. RTAB-Map, in specific, is composed of a front-end and back-end. The front-end includes sensor data and odometry as well an algorithm to detecting loop closures. The back-end is concerned with graph optimization and map generation. The loop closure algorithm determines if the robot has returned to a previous location based on similarity of the sensor data and odometry.
 
 For the robot in discussion here, a 2D map is sufficient, because our robot moves only in 2D space. However, for airborne robots like drones a 3D map is necessary because they move in three dimensions.
 
-During the classroom work for this project, several varieties of SLAM were discussed such as FastSLAM and GraphSLAM. The algorithm used in this project is RTAB-Map (real-time appearance-based) which is based on GraphSLAM.
 
 \section{Model Configuration}
 The robot was based on the Udacity robot from the "Where am I?" project. It was a small box-shaped chassis with 2 driven-wheels on the sides and 2 stabilizing wheels fore and aft. The robot has a Hokuyo laser scanner and a camera attached on the front. In the previous project, the camera was a simple RGB camera. This was changed to an RGBD camera to satisfy the project requirements.
@@ -190,14 +194,15 @@ Mapping the "Back Alley" world proved to be much more difficult. The mapping alg
     \label{fig:confused_cone}
 \end{figure}
 
-Perhaps RTAB-Map can be tuned to have better performance. Adjusting the parameters for RTAB-Map was attempted as per the ROS RTAB-Map tutorial, but met limited success. There was also some confusion about setting up the ROS envinronment on a local machine and whether RTAB-Map 1.8 or 1.9 would work.
+Perhaps RTAB-Map can be tuned to have better performance. Adjusting the parameters for RTAB-Map was attempted as per the ROS RTAB-Map tutorial, but met limited success. There was also some confusion about setting up the ROS environment on a local machine and whether RTAB-Map 1.8 or 1.9 would work.
 
 Navigating the small robot around was painfully slow. It took around 10 minutes to complete 3 circles of the environments.
 
 \section{Conclusion / Future work}
-Considering that the project on SLAM was only a simulation, it seems that it would be challenging to optimize and get satisfactory results in the real world.
+Considering that the project was only a simulation of SLAM, it seems that it would be challenging to optimize and get satisfactory results in the real world. That being said, an interesting next step would be to model a real-life physical space, optimize parameters in simulation and then apply the same parameter tuning to the real-life space on a real-life robot such as the TurtleBot. The difference between simulation and real-life is always a challenge in engineering and a current area of research for deep reinforcement learning.
 
-In future, more automation would be helpful. Manually navigating the robot around the environment was extremely time consuming. It would be much more efficient to define a path for the robot to follow.
+The RTAB-Map approach seems like it can work well for small indoor spaces. In an outdoor environment, the addition of existing maps and GPS may make SLAM unnecessary for solving the path planning problem, at least in a "global" sense, but SLAM may still be necessary for obstacle avoidance. Perhaps GPS information can be included along with LIDAR and RGBD data to improve results.
 
-Another issue is a lack of useful documentation on elements of ROS and RTAB-Map.
+In future, to make simulation less time consuming and more practical, more automation is necessary. Manually navigating the robot in the environment is extremely time consuming. It would be much more efficient to predefine a path for the robot to follow and automate the teleoperation.
+
 \end{document}
